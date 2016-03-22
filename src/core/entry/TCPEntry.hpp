@@ -32,6 +32,11 @@ namespace ka
 				}
 				}*/
 			};
+		public:
+			virtual Nil run(Int numThreads)
+			{
+				core::IModule::run(numThreads);
+			}
 		};
 	};
 };

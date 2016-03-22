@@ -215,5 +215,11 @@
     <ClInclude Include="src\core\entry\HTTPEntry.hpp">
       <Filter>src\core\entry</Filter>
     </ClInclude>
+    <ClInclude Include="src\xlib\xlib.u_.h">
+      <Filter>src\xlib\internal</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ka.cnf" />
   </ItemGroup>
 </Project>

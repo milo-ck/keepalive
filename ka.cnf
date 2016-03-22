@@ -1,0 +1,14 @@
+
+threads.tcp = 4
+
+threads.http = 4
+
+threads.message = 3
+
+alloc.size =		32,64,126,256,512,4096
+
+alloc.num  =		1, 2, 4, 4, 5, 6
+
+alloc.initCount =	1, ,2, 4,
+
+path.temp = ./temp/

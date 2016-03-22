@@ -1,5 +1,6 @@
 #pragma once
 #include "core/kastd.h"
+#include "core/Config.hpp"
 #include "core/Controller.hpp"
 #include "core/msg/Message.hpp"
 #include "core/entry/TCPEntry.hpp"
@@ -21,7 +22,12 @@ namespace ka
 		Nil setup()
 		{
 			if(messager)return;
-
+			const Config::Alloc* alloc = Config::alloc();
+			if (alloc->length > 0)
+			{
+				xlib::MemoryPool::pool()->clear();
+				xlib::allocPool(alloc->size, alloc->num, alloc->initCount, alloc->length);
+			}
 			messager = new msg::Message();
 			http = new entry::HTTPEntry();
 			tcp = new entry::TCPEntry();
@@ -30,9 +36,10 @@ namespace ka
 			core::Controller::add(tcp);
 			core::Controller::add(http);
 
-			messager->run(2);
-			tcp->run(1);
-			http->run(1);
+			const Config::Threads* thread = Config::threads();
+			messager->run(thread->message);
+			tcp->run(thread->tcp);
+			http->run(thread->http);
 		};
 		Nil exit()
 		{

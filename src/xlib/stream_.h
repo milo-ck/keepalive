@@ -14,27 +14,4 @@ namespace xlib
 		
 
 	};
-	namespace u
-	{
-		inline Boolean isLittleEndian()
-		{
-			union 
-			{
-				Short s;
-				Byte b[2];
-			}a;
-			a.s = 0x0102;
-			return (a.b[0] == 2 && a.b[1] == 1);
-		}
-		inline Nil invertBytes(Byte* src, Int num)
-		{
-			Int len = num / 2;
-			for (Int l = 0, r = num - 1; l < len; l++, r--)
-			{
-				Byte temp = src[r];
-				src[r] = src[l];
-				src[l] = temp;
-			}
-		}
-	}
 }

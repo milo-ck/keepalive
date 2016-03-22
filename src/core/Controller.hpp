@@ -74,7 +74,7 @@ namespace ka
 
 		public:
 			virtual Byte id() = 0;
-			void run(Int numThreads)
+			virtual Nil run(Int numThreads)
 			{
 				for (Int i = 0; i < numThreads; i ++)
 				{
