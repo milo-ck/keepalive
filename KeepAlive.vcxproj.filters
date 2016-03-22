@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{bf21c7e2-cc65-4a8e-bf11-80858c84c503}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\xlib">
+      <UniqueIdentifier>{8848283d-1570-4b20-94a7-35a00abd7030}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core">
+      <UniqueIdentifier>{e4c23e5b-63a1-43fd-a3b6-92f082ca8f47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core\msg">
+      <UniqueIdentifier>{71dd5800-a25e-41de-ba6f-1b08e21cb785}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core\data">
+      <UniqueIdentifier>{e5ac6ef4-7605-41c2-b3f3-1385685d7c76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core\m">
+      <UniqueIdentifier>{7efef70c-7ac5-41ad-a284-6629086e4882}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core\msg\cmd">
+      <UniqueIdentifier>{556f22d2-9a14-4ba0-9e0e-8df88ce66a33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core\std">
+      <UniqueIdentifier>{c84ea9c3-9e0b-4776-b2ed-be56a57730ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core\msg\data">
+      <UniqueIdentifier>{130a9990-f337-4dc6-8b09-e74955d99929}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core\entry">
+      <UniqueIdentifier>{9a7ea4dc-a842-41cb-848b-5581b23fecb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\xlib\internal">
+      <UniqueIdentifier>{18cc3a43-894e-4092-917c-b41f0bba1dff}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\xlib\Log.hpp">
+      <Filter>src\xlib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xlib\Mutex.hpp">
+      <Filter>src\xlib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xlib\MutexSignal.hpp">
+      <Filter>src\xlib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xlib\Counter.hpp">
+      <Filter>src\xlib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xlib\xlib.h">
+      <Filter>src\xlib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xlib\Exception.hpp">
+      <Filter>src\xlib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\Message.hpp">
+      <Filter>src\core\msg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\Header.h">
+      <Filter>src\core\msg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\IMessageReader.h">
+      <Filter>src\core\msg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\MessageReader.hpp">
+      <Filter>src\core\msg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xlib\StreamReader.hpp">
+      <Filter>src\xlib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xlib\StreamWriter.hpp">
+      <Filter>src\xlib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\QueryReader.hpp">
+      <Filter>src\core\msg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\MessageWriter.hpp">
+      <Filter>src\core\msg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\QueryWriter.hpp">
+      <Filter>src\core\msg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\IMessageWriter.h">
+      <Filter>src\core\msg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\DataStore.hpp">
+      <Filter>src\core\msg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\data\IBuffer.h">
+      <Filter>src\core\data</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\data\Buffer.hpp">
+      <Filter>src\core\data</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Config.hpp">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xlib\Thread.hpp">
+      <Filter>src\xlib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\m\Method.hpp">
+      <Filter>src\core\m</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\m\OnBuffer.hpp">
+      <Filter>src\core\m</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\cmd\BufferParser.hpp">
+      <Filter>src\core\msg\cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\cmd\Login.hpp">
+      <Filter>src\core\msg\cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\cmd\ICommand.h">
+      <Filter>src\core\msg\cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\cmd\MultiTarget.hpp">
+      <Filter>src\core\msg\cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\cmd\SingleTarget.hpp">
+      <Filter>src\core\msg\cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\cmd\KeepAlive.hpp">
+      <Filter>src\core\msg\cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\cmd\QueryNodes.hpp">
+      <Filter>src\core\msg\cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\cmd\QueryOwnerID.hpp">
+      <Filter>src\core\msg\cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\cmd\QueryStatus.hpp">
+      <Filter>src\core\msg\cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\m\OnNodeClosed.hpp">
+      <Filter>src\core\m</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\cmd\NodeClosed.hpp">
+      <Filter>src\core\msg\cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\cmd\IBufferCommand.h">
+      <Filter>src\core\msg\cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\msg\data\RequestPool.hpp">
+      <Filter>src\core\msg\data</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xlib\DataEntryLinux.hpp">
+      <Filter>src\xlib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xlib\DataEntryWin.hpp">
+      <Filter>src\xlib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xlib\IDataEntry.hpp">
+      <Filter>src\xlib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xlib\types_.h">
+      <Filter>src\xlib\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xlib\stream_.h">
+      <Filter>src\xlib\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xlib\allocator.hpp">
+      <Filter>src\xlib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xlib\pthread_.h">
+      <Filter>src\xlib\internal</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xlib\MemoryPool.hpp.bak">
+      <Filter>src\xlib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xlib\MemoryPool.hpp">
+      <Filter>src\xlib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xlib\MemoryStream.hpp">
+      <Filter>src\xlib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xlib\FileStream.hpp">
+      <Filter>src\xlib</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\data\data.h">
+      <Filter>src\core\data</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Controller.hpp">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Application.hpp">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\std\core.err.h">
+      <Filter>src\core\std</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\std\core.h">
+      <Filter>src\core\std</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\std\core.u.h">
+      <Filter>src\core\std</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\std\data.h">
+      <Filter>src\core\std</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\std\data.u.h">
+      <Filter>src\core\std</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\kastd.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\entry\TCPEntry.hpp">
+      <Filter>src\core\entry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\entry\HTTPEntry.hpp">
+      <Filter>src\core\entry</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src-uc">
+      <UniqueIdentifier>{fb4b3d17-e992-4958-a8e3-bc0eabb0971e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src-uc\mempool">
+      <UniqueIdentifier>{83028428-6fd2-41c0-8f3e-62081e3f2806}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src-uc\stream">
+      <UniqueIdentifier>{772c9403-8a24-426d-a469-8a5f0f93efaa}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src-uc\main.cpp">
+      <Filter>src-uc</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src-uc\mempool\MemoryPoolCase.hpp">
+      <Filter>src-uc\mempool</Filter>
+    </ClInclude>
+    <ClInclude Include="src-uc\stream\StreamCase.hpp">
+      <Filter>src-uc\stream</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

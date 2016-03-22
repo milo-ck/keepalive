@@ -1,0 +1,107 @@
+<html>
+<head>
+	<title>Memory Pool Initializer Calculator</title>
+	<style type="text/css">
+	body{padding: 5px; margin: 0px; font-family: "Courier New"; font-size: 12px;}
+	/*table{width: 100%;};*/
+	td{padding: 5px 10px 5px 10px; font-size: 10px;}
+	</style>
+	<script type="text/javascript">
+	
+	function init()
+	{
+		(function()
+		{
+			var input = document.getElementById("input");
+			var output = document.getElementById("output");
+			input.addEventListener("keyup", update);
+			input.innerText = "32, 64, 128, 256, 512\n255,255,255,255\n1,1,1,1";
+
+			update();
+			function getDefined(s)
+			{
+				var sa = s.split(/\r\n/);
+				var ret = [];
+				var count = 0;
+				for(var k in sa)
+				{
+					var line = sa[k].trim();
+					if(!line)continue;
+					var lsa = line.split(",");
+					var row = [];
+					for(var k1 in lsa)
+					{
+						var i = parseInt(lsa[k1].trim());
+						if(isNaN(i))continue;
+						row.push(i);
+					}
+					ret.push(row);
+					count = Math.max(count, row.length);
+					if(ret.length == 3)break;
+				}
+				while(ret.length < 3)ret.push([]);
+				for(var k in ret)
+				{
+					var row = ret[k];
+					while(row.length < count)row.push(0);
+				}
+				return ret;
+			}
+			function toBitString(b)
+			{
+				if(b < 1024)return b + "B";
+				if(b >= 1024 && b < 1024*1024) return (b/1024).toFixed(2) + "KB";
+				return  (b/(1024*1024)).toFixed(2) + "MB";
+			}
+			function update()
+			{
+				var defined = getDefined(input.innerText);
+				var htmls = ["", "", "", "", "", ""];
+				htmls[0] += "<tr><td>Block patch size</td>";
+				htmls[1] += "<tr><td>Block patch num</td>";
+				htmls[2] += "<tr><td>Init block num</td>";
+				htmls[3] += "<tr><td>Block size</td>";
+				htmls[4] += "<tr><td>Init size</td>";
+				
+				var len = defined[0].length;
+				var initTotalSize = 0;
+				for(var i = 0; i < len; i ++)
+				{
+					htmls[0] += "<td>" +defined[0][i] + "(" +toBitString(defined[0][i])+ ")</td>";
+					htmls[1] += "<td>" +defined[1][i]+ "</td>";
+					htmls[2] += "<td>" +defined[2][i]+ "</td>";
+					var bsize = defined[0][i] * defined[1][i];
+					var isize = bsize * defined[2][i];
+					initTotalSize += isize;
+					htmls[3] += "<td>" + toBitString(bsize)+ "</td>";
+					htmls[4] += "<td>" + toBitString(isize)+  "</td>";
+				}
+
+				htmls[0] += "</tr>";
+				htmls[1] += "</tr>";
+				htmls[2] += "</tr>";
+				htmls[3] += "</tr>"
+				htmls[4] += "</tr>";
+				var ret = "<br /><table>" + htmls.join("") + "</table>";
+				ret += "<br /><div>The pool init total size " + toBitString(initTotalSize) + ",  " + initTotalSize +" B</div>";
+				ret += "<br /><br /><pre>";
+				ret += "Int patchSizes		[" + len + "] = {" + defined[0].join(",") + "};<br />";
+				ret += "UShort patchNums		[" + len + "] = {" + defined[1].join(",") + "};<br />";
+				ret += "UShort initPatchNums		[" + len + "] = {" + defined[2].join(",") + "};<br /></pre>";
+
+				output.innerHTML = ret;
+			}
+		})();
+	}
+	/*
+	32,  64,  128, 256, 512, 1024, 4096, 8192, 16384, 32768
+255, 255, 255, 255, 255, 255,  255,  255,  255,   255
+2,   2,   2,   2,   2,   4,    2,    2,    2,     254,
+32,  32,  16,  16,  8,   8,    4,    4,    2,     1*/
+	</script>
+</head>
+<body onload="init()">
+	<textarea  id="input" style="width:80%; height:100px;"></textarea>
+	<div id="output"></div>
+</body>
+</html>

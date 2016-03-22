@@ -1,0 +1,268 @@
+#pragma once
+#include "xlib/types_.h"
+#include "xlib/Mutex.hpp"
+#include "xlib/Log.hpp"
+namespace xlib
+{
+	class MemoryPool
+	{
+	private:
+		class Block
+		{
+		private:
+			Byte* patchs_;
+			Block* next_;
+			Int used_;
+			Boolean used(Byte* data)
+			{
+				return data[0] == 1;
+			}
+			Nil used(Byte* data, Boolean isUsed, Byte num)
+			{
+				data[0] = isUsed ? 1 : 0;
+				data[1] = num;
+			}
+			Byte count(Byte* data)
+			{
+				return data[1];
+			}
+			Block():patchs_(0), next_(0), used_(0)
+			{
+			}
+			Nil init(Byte* data, Int perSize, Int num)
+			{
+				patchs_ = data;
+				for (Int i = 0; i < num; i++)
+				{
+					used(data, false, 0);
+					data += perSize;
+				}
+			}
+		public:
+			Nil dump(Int size)
+			{
+				xprint(" [Pool Block] from %llx to %llx, used %d. ", patchs_, patchs_ + size, used_);
+			}
+			static Block* create(Int totalSize, Int perSize, Int num, Byte* initData = null)
+			{
+				Byte* data = null;
+				if (initData)
+				{
+					data = initData;
+				}
+				else
+				{
+					data = (Byte*)malloc(totalSize);
+					//xprint("[Pool] Alloc %d bytes (%llx) from system, Patch size %dB, Patch num %d.", data, totalSize, perSize, num);
+				}
+				if (data == null)return null;
+				
+				Block* b = new Block();
+				if (!b)
+				{
+					if(data != initData)free(data);
+					return null;
+				}
+				b->init(data, perSize, num);
+				return b;
+			}
+			Block* next() { return next_; }
+			Nil next(Block* b) { next_ = b; }
+			
+			Object alloc(Int patchNum, Int allocNum, Int patchSize)
+			{
+				if (used_ == patchNum)return null;
+				Int i = 0;
+				while (i < patchNum)
+				{
+					Byte* data = &patchs_[i * patchSize];
+					if (used(data))
+					{
+						i += count(data);
+						continue;
+					}
+					Int numFree = allocNum - 1;
+					i++;
+					Boolean isOk = true;
+					while (i < patchNum && numFree > 0)
+					{
+						Byte* temp = &patchs_[i * patchSize];
+						if (used(temp))
+						{
+							isOk = false;
+							i += count(temp);
+							break;
+						}
+						i++;
+						numFree--;
+					}
+					if (isOk)
+					{
+						used(data, true, allocNum);
+						used_ += allocNum;
+						//xprint("[Pool] Alloc %d patchs (%llx) from %d.", allocNum, data, patchSize);
+						return &data[2];
+					}
+				}
+				return null;
+			}
+			Nil dealloc(Byte* data, Int perSize)
+			{
+				data -= 2;
+				int num = count(data);
+				used_ -= num;
+				xprint("[Pool] Dealloc %d patchs (%llx) from %d.", num, data, perSize);
+				for (Int i = 0; i < num; i++)
+				{
+					used(data, false, 0);
+					data += perSize;
+				}
+			}
+			Boolean contains(Byte* data, Int totalSize)
+			{
+				Object start = patchs_;
+				Object end = &patchs_[totalSize];
+				return start < data && end > data;
+			}
+			
+		};
+		class Blocks
+		{
+		private:
+			Int blockSize_;//Total size of per block.
+			Int patchSize_;//Size of data on each block;
+			Int patchNum_; //Total number of data on each block
+			Int allocSize_;
+			Block* first_;
+			Mutex mutex;
+		public:
+			Nil dump()
+			{
+				xprint("[Pool Blocks] Block size %d, Patch size %d, Patch num %d, Max alloc size %d. ", blockSize_, patchSize_, patchNum_, allocSize_);
+				Int count = 0;
+				Block* it = first_;
+				while (it)
+				{
+					it->dump(blockSize_);
+					it = it->next();
+					count++;
+				}
+				xprint("[Pool Blocks] Block num %d", count);
+			}
+			Int init(Int patchSize, Int patchNum, Int allocNum, Byte* data, Int initNum)
+			{
+				patchNum_ = patchNum;
+				patchSize_ = patchSize;
+				blockSize_ = patchSize_ * patchNum_;
+				allocSize_ = allocNum * patchSize_ - 2;
+				first_ = Block::create(blockSize_, patchSize, patchNum, data);
+				
+				Int ret = initNum * blockSize_;
+				initNum--;
+				data += blockSize_;
+				Block* tmp = first_;
+				while (tmp && initNum > 0)
+				{
+					tmp->next(Block::create(blockSize_, patchSize, patchNum, data));
+					tmp = tmp->next();
+					data += blockSize_;
+					initNum--;
+				}
+				return ret;
+			}
+			Object alloc(Int size)
+			{
+				lock_mutex(&mutex);
+				if (!first_)return 0;
+				Block* block = first_;
+				Int allocNum = static_cast<Int>(ceil((Number)(size + 2) / (Number)patchSize_));
+				while (true)
+				{
+					Object ret = block->alloc(patchNum_, allocNum, patchSize_);
+					if (ret) return ret;
+					Block* next = block->next();
+					if (next == null)
+						break;
+					block = next;
+				}
+				Block* next = Block::create(blockSize_, patchSize_, patchNum_);
+				if (next)
+				{
+					block->next(next);
+					return next->alloc(blockSize_, allocNum, patchSize_);
+				}
+				return null;
+			}
+			Boolean dealloc(Byte* data)
+			{
+				lock_mutex(&mutex);
+				if (!first_)return false;
+				Block* block = first_;
+				while (block)
+				{
+					if (block->contains(data, blockSize_))
+					{
+						block->dealloc(data, patchSize_);
+						return true;
+					}
+					block = block->next();
+				}
+				return false;
+			}
+			Boolean allocable(Int size) { return size <= allocSize_; }
+		};
+		Blocks* blocks_;
+		Int count_;
+		MemoryPool() :blocks_(null), count_(0)
+		{
+		}
+	public:
+		static MemoryPool* pool()
+		{
+			static MemoryPool i;
+			return &i;
+		}
+		Nil init(const Int* patchSizes, const Byte* patchNum, const Byte* maxAllocNum, const Int* initBlockNum, Int count)
+		{
+			count_ = count;
+			blocks_ = new Blocks[count];
+			Int size = 0;
+			for (Int i = 0; i < count; i++)
+				size += patchSizes[i] * patchNum[i] * initBlockNum[i];
+			Byte* data = (Byte*)malloc(size);
+			xprint("[Pool] Alloc init bytes (%llx) to %dB", data, size);
+			for (Int i = count - 1; i >= 0; i--)
+			{
+				data += blocks_[i].init(patchSizes[i], patchNum[i], maxAllocNum[i], data, initBlockNum[i]);
+			}
+		}
+		Object alloc(Int size)
+		{
+			for (Int i = 0; i < count_; i++)
+			{
+				if (blocks_[i].allocable(size))
+					return blocks_[i].alloc(size);
+			}
+			Object ret = malloc(size);
+			xprint("[Pool] Alloc from malloc size %d, pointer %llx.", size, ret);
+			return ret;
+		};
+		Boolean dealloc(Object ptr)
+		{
+			if (!ptr) return true;
+			for (Int i = 0; i < count_; i++)
+			{
+				if (blocks_[i].dealloc((Byte*)ptr))
+					return true;
+			}
+			xprint("[Pool] Dealloc from free pointer %llx.", ptr);
+			free(ptr);
+			return true;
+		};
+		Nil dump()
+		{
+			for (Int i = 0; i < count_; i++)
+				blocks_[i].dump();
+		}
+	};
+}
