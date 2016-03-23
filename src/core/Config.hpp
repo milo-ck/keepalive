@@ -23,10 +23,16 @@ namespace ka
 		{
 			String temp;
 		};
+		struct Server
+		{
+			UShort port;
+			UShort httpPort;
+		};
 	private:
 		Threads threads_;
 		Alloc alloc_;
 		Path path_;
+		Server server_;
 		static Config* config()
 		{
 			static Config cnf;
@@ -36,6 +42,7 @@ namespace ka
 		{
 			memset(&alloc_, 0, sizeof(alloc_));
 			threads_.http = threads_.message = threads_.tcp = 2;
+			server_.port = server_.httpPort = 0;
 			FILE* file = fopen("ka.cnf", "r");
 			if (file != null)
 			{
@@ -136,6 +143,16 @@ namespace ka
 				{
 					alloc_.initCount = split<UShort>(s, alloc_.initCount);
 				}
+				else if(xlib::u::startWith(s, "server.port"))
+				{
+					s = strstr(s, "=");
+					if (s)server_.port = (UShort)xlib::u::toInt(xlib::u::trim(s + 1, xlib::u::TrimBoth), server_.port);
+				}
+				else if (xlib::u::startWith(s, "server.httpPort"))
+				{
+					s = strstr(s, "=");
+					if (s)server_.httpPort = xlib::u::toInt(xlib::u::trim(s + 1, xlib::u::TrimBoth), server_.httpPort);
+				}
 			}
 		}
 	public:
@@ -151,6 +168,10 @@ namespace ka
 		static const Path* path()
 		{
 			return &config()->path_;
+		}
+		static const Server* server()
+		{
+			return &config()->server_;
 		}
 		static String getTempPath(const Char* format, ...)
 		{

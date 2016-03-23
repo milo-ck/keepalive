@@ -218,6 +218,9 @@
     <ClInclude Include="src\xlib\xlib.u_.h">
       <Filter>src\xlib\internal</Filter>
     </ClInclude>
+    <ClInclude Include="src\entry\entry.u.h">
+      <Filter>src\core\entry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="ka.cnf" />

@@ -6,11 +6,12 @@ namespace ka
 {
 	namespace entry
 	{
-		class TCPEntry : public core::IModule
+		class TCPEntry : public core::IModule, public xlib::IDataEntry::Listener
 		{
 		public:
 			virtual Byte id() { return core::IDTCPEntry; };
-
+		private:
+			xlib::IDataEntry* entry;
 		protected:
 			virtual Nil execute(const core::Parameter* p)
 			{
@@ -35,8 +36,33 @@ namespace ka
 		public:
 			virtual Nil run(Int numThreads)
 			{
+				entry = xlib::IDataEntry::create(this);
+				entry->start(Config::server()->port, Config::threads()->tcp);
 				core::IModule::run(numThreads);
 			}
+		public:
+		public:
+			virtual Nil onError(xlib::IDataEntry::ErrorCode code, const char* foramt, ...)
+			{
+			};
+			virtual xlib::IDataEntry::UserTag onNewClient(const sockaddr_in* addr, xlib::IDataEntry::EntryTag tag)
+			{
+				data::Node* node = data::u::newNode();
+				node->tag = tag;
+				memcpy(node->ip, &addr->sin_addr.S_un.S_addr, 4);
+				return node;
+			};
+			virtual Nil onRecvData(Byte* data, Int numBytes, xlib::IDataEntry::UserTag tag)
+			{
+				data::Node* node = static_cast<data::Node*>(tag);
+				if (node)
+				{
+
+				}
+			};
+			virtual Nil getSendData(Byte* data, Int lenOfData, Int* len, xlib::IDataEntry::UserTag tag)
+			{
+			};
 		};
 	};
 };

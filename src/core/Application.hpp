@@ -18,6 +18,11 @@ namespace ka
 		Application():http(null), tcp(null), messager(null)
 		{
 			xthread_attach();
+			xlib::IDataEntry::load();
+		}
+		~Application()
+		{
+			xlib::IDataEntry::unload();
 		}
 		Nil setup()
 		{
@@ -38,8 +43,8 @@ namespace ka
 
 			const Config::Threads* thread = Config::threads();
 			messager->run(thread->message);
-			tcp->run(thread->tcp);
-			http->run(thread->http);
+			tcp->run(1);
+			http->run(1);
 		};
 		Nil exit()
 		{
