@@ -1,6 +1,7 @@
 #pragma once
 #include "core/kastd.h"
 #include "core/Controller.hpp"
+#include "core/data/data.h"
 
 namespace ka
 {
@@ -57,7 +58,19 @@ namespace ka
 				data::Node* node = static_cast<data::Node*>(tag);
 				if (node)
 				{
+					data::IBuffer* buff = null;
+					if (!node->recver)
+					{
+						int len = data[0] << 24 | data[1] << 16 | data[2] << 8 | data[3];
+						buff = data::IBuffer::create(len);
+						node->recver = buff;
+					}
+					else
+					{
+						buff = static_cast<data::IBuffer*>(node->recver);
+					}
 
+					buff->writer()->writeBytes(data, numBytes);
 				}
 			};
 			virtual Nil getSendData(Byte* data, Int lenOfData, Int* len, xlib::IDataEntry::UserTag tag)
