@@ -19,10 +19,11 @@ namespace ka
 			/*Object recvRef; //@see IBuffer
 			Object sendRef; //@see IBufferChain
 			Object requestRef;//@see IReqeustPool*/
-			Object tag;
-			Object sender;
-			Object recver;
-			Object requestor;
+			Object tag; //used by Entry
+			Object sendBuff;
+			Object recvBuff;
+			Byte data[16];//0-8 used by recv
+			Object requestPool;
 
 			
 			UInt updateTime;

@@ -1,3 +1,4 @@
+#pragma once
 #include "xlib/xlib.h"
 namespace ka
 {

@@ -56,22 +56,30 @@ namespace ka
 			virtual Nil onRecvData(Byte* data, Int numBytes, xlib::IDataEntry::UserTag tag)
 			{
 				data::Node* node = static_cast<data::Node*>(tag);
-				if (node)
+				xthrow(node == null, error::CorruptData, "Failed to convert xlib::IDataEntry::UserTag to data::Node.");
+				data::IBuffer* buff = null;
+				if (!node->recvBuff)
 				{
-					data::IBuffer* buff = null;
-					if (!node->recver)
-					{
-						int len = data[0] << 24 | data[1] << 16 | data[2] << 8 | data[3];
-						buff = data::IBuffer::create(len);
-						node->recver = buff;
-					}
-					else
-					{
-						buff = static_cast<data::IBuffer*>(node->recver);
-					}
+					Int numCached = node->data[0];
+					Int numCopies = numCached + numBytes;
+					numCopies = numCopies > 4 ? numCopies - numCached : numBytes;
+					memcpy(&node->data[numCached + 1], data, numCopies);
+					numBytes -= numCopies;
+					data += numCopies;
 
-					buff->writer()->writeBytes(data, numBytes);
+					numCopies = numCopies + node->data[0];
+					node->data[0] = numCopies;
+					if (numCopies < 4)return;
+					Byte* userData = node->data;
+					int len = userData[0] << 24 | userData[1] << 16 | userData[2] << 8 | userData[3];
+					buff = data::IBuffer::create(len);
+					node->recvBuff = buff;
 				}
+				else 
+				{
+					buff = static_cast<data::IBuffer*>(node->recvBuff);
+				}
+				buff->writer()->writeBytes(data, numBytes);
 			};
 			virtual Nil getSendData(Byte* data, Int lenOfData, Int* len, xlib::IDataEntry::UserTag tag)
 			{

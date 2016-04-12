@@ -62,8 +62,8 @@ namespace ka
 								writer->unref();
 							}
 						}
-						core::u::unref(&node->sender);
-						core::u::unref(&node->recver);
+						core::u::unref(&node->sendBuff);
+						core::u::unref(&node->recvBuff);
 						core::u::unref(&node->requestor);
 						store_->removeNode(node);
 					}

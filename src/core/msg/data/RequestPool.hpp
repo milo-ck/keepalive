@@ -19,17 +19,17 @@ namespace ka
 		public:
 			static RequestPool* get(data::Node* node)
 			{
-				if (node->requestor)
-					return (RequestPool*)node->requestor;
+				if (node->requestPool)
+					return (RequestPool*)node->requestPool;
 				return 0;
 			}
 			static RequestPool* getOrNew(data::Node* node)
 			{
-				if (node->requestor == 0)
+				if (node->requestPool == 0)
 				{
-					node->requestor = new RequestPool();
+					node->requestPool = new RequestPool();
 				}
-				return (RequestPool*)node->requestor;
+				return (RequestPool*)node->requestPool;
 			}
 			RequestPool() :len_(0)
 			{
