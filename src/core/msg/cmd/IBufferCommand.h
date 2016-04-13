@@ -21,9 +21,8 @@ namespace ka
 
 				bool post(data::IBuffer* buff, ka::id to)
 				{
-					buff->ref();
 					const core::Parameter* param = recvbuf_->p();
-					m::OnBuffer sndbuf(param->toId, param->fromId, param->method, buff, recvbuf_->node());
+					m::OnBuffer sndbuf(param->toId, param->fromId, buff, recvbuf_->node());
 					sndbuf.post();
 				};
 

@@ -160,6 +160,7 @@
     <ClInclude Include="src\core\data\Buffer.hpp" />
     <ClInclude Include="src\core\data\data.h" />
     <ClInclude Include="src\core\data\IBuffer.h" />
+    <ClInclude Include="src\core\entry\entry.u.h" />
     <ClInclude Include="src\core\entry\HTTPEntry.hpp" />
     <ClInclude Include="src\core\entry\TCPEntry.hpp" />
     <ClInclude Include="src\core\kastd.h" />
@@ -192,7 +193,6 @@
     <ClInclude Include="src\core\std\core.u.h" />
     <ClInclude Include="src\core\std\data.h" />
     <ClInclude Include="src\core\std\data.u.h" />
-    <ClInclude Include="src\entry\entry.u.h" />
     <ClInclude Include="src\xlib\allocator.hpp" />
     <ClInclude Include="src\xlib\Counter.hpp" />
     <ClInclude Include="src\xlib\FileStream.hpp" />

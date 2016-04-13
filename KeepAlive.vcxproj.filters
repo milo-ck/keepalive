@@ -218,7 +218,7 @@
     <ClInclude Include="src\xlib\xlib.u_.h">
       <Filter>src\xlib\internal</Filter>
     </ClInclude>
-    <ClInclude Include="src\entry\entry.u.h">
+    <ClInclude Include="src\core\entry\entry.u.h">
       <Filter>src\core\entry</Filter>
     </ClInclude>
   </ItemGroup>

@@ -4,6 +4,7 @@
 #include "xlib/stream_.h"
 #include "xlib/Exception.hpp"
 #include <stdio.h>
+#include <io.h>
 
 namespace xlib
 {
@@ -43,6 +44,14 @@ namespace xlib
 		}
 		virtual Int		length()			{ return length_;				}
 		virtual Boolean eos()				{ return position_ >= length_;	}
+		virtual Nil		length(Int v)
+		{
+			xthrow(file_ == null, error::InvalidFileStream, "Failed to set length to file stream.");
+			Int h = fileno(file_);
+			chsize(h, v);
+			length_ = v;
+			
+		}
 
 		virtual Int		read(Byte* data, Int len)
 		{

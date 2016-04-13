@@ -31,12 +31,13 @@ namespace ka
 			};
 
 			UInt fid_;
+			IBuffer* next_;
 			core::AutoPtr<xlib::IStream>  stream_;
 			core::AutoPtr<xlib::StreamWriter> writer_;
 			core::AutoPtr<xlib::StreamReader> reader_;
 			xlib::IStream* stream() { return stream_; }
 		public:
-			Buffer(Int len):fid_(0)
+			Buffer(Int len):fid_(0), next_(null)
 			{
 				if(len < 40960)
 					stream_ = xlib::create<xlib::MemoryStream>(len);
@@ -45,7 +46,7 @@ namespace ka
 					fid_ = ID::getId();
 					stream_ = xlib::create<xlib::FileStream>(Config::getTempPath("%d.buf", fid_).c_str());
 				}
-				
+				stream()->length(len);
 			}
 		public:
 			virtual xlib::StreamReader* reader()
@@ -65,6 +66,8 @@ namespace ka
 			virtual Int length()				{ return stream()->length(); };
 			virtual Int position()				{ return stream()->position(); };
 			virtual Boolean position(Int pos)	{ return stream()->position(pos);};
+			virtual Nil next(IBuffer* buff) { next_ = buff; };
+			virtual IBuffer* next() { return next_; };
 		protected:
 			virtual Nil disposing()
 			{
@@ -73,6 +76,7 @@ namespace ka
 					unlink(Config::getTempPath("%d.buf", fid_).c_str());
 					fid_ = 0;
 				}
+				next_ = null;
 			}
 		};
 

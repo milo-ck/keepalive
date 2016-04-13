@@ -16,6 +16,8 @@ namespace ka
 			virtual Int length() = 0;
 			virtual Int position() = 0;
 			virtual Boolean position(Int pos) = 0;
+			virtual IBuffer* next() = 0;
+			virtual Nil next(IBuffer* buff) = 0;
 		};
 	};
 };

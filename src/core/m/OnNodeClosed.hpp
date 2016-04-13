@@ -10,7 +10,7 @@ namespace ka
 		{
 		public:
 			enum { ID = NodeClosed, };
-			OnNodeClosed(Byte fromId, Byte toId, Byte method, data::Node* node) :Method(fromId, ID, toId, 0)
+			OnNodeClosed(Byte fromId, Byte toId, data::Node* node) :Method(fromId, ID, toId, 0)
 			{
 				p_.p1 = node;
 				p_.p2 = 0;

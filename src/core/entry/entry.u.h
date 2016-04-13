@@ -11,6 +11,11 @@ namespace entry
 		{
 
 		};
+
+		Int readLength(Byte* data)
+		{
+			return data[0] << 24 | data[1] << 16 | data[2] << 8 | data[3];
+		};
 	}
 }
 }

@@ -53,18 +53,15 @@ namespace ka
 								writer->header(&h);
 								writer->writeHeader();
 
-								buff->ref();
 								const core::Parameter* param = onNodeClosed_->p();
-								m::OnBuffer sndbuf(param->toId, param->fromId, m::OnBuffer::ID, buff, from);
+								m::OnBuffer sndbuf(param->toId, param->fromId, buff, from);
 								sndbuf.post();
 
 								buff->unref();
 								writer->unref();
 							}
 						}
-						core::u::unref(&node->sendBuff);
-						core::u::unref(&node->recvBuff);
-						core::u::unref(&node->requestor);
+						core::u::unref(&node->requestPool);
 						store_->removeNode(node);
 					}
 					return true;

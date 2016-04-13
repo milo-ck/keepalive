@@ -2,6 +2,7 @@
 #include "core/kastd.h"
 #include "core/Controller.hpp"
 #include "core/data/data.h"
+#include "core/entry/entry.u.h"
 
 namespace ka
 {
@@ -16,23 +17,29 @@ namespace ka
 		protected:
 			virtual Nil execute(const core::Parameter* p)
 			{
-				/*switch (p->method)
+				switch (p->method)
 				{
 				case m::OnBuffer::ID:
 				{
-					m::OnBuffer buf(p);
-					cmd::BufferParser parser;
-					parser.onBuffer(buf, store_);
+					m::OnBuffer onbuf(p);
+					data::Node* node = onbuf.node();
+					data::IBuffer* buff = onbuf.buffer();
+					buff->position(0);
+					if (node->sendBuff)
+					{
+						data::IBuffer* current = static_cast<data::IBuffer*>(node->sendBuff);
+						current->next(buff);
+					}
+					else
+					{
+						node->sendBuff = buff;
+						entry->trySend(node->tag);
+					}
 					break;
 				}
-				case m::OnNodeClosed::ID:
-				{
-					m::OnNodeClosed node(p);
-					cmd::NodeClosed nodeClosed(&node, store_);
-					nodeClosed.execute();
+				default:
 					break;
 				}
-				}*/
 			};
 		public:
 			virtual Nil run(Int numThreads)
@@ -42,7 +49,25 @@ namespace ka
 				core::IModule::run(numThreads);
 			}
 		public:
-		public:
+			virtual Nil onCloseClient(xlib::IDataEntry::UserTag tag)
+			{
+				data::Node* node = static_cast<data::Node*>(tag);
+				xthrow(node == null, error::CorruptData, "Failed to convert xlib::IDataEntry::UserTag to data::Node.");
+				
+				data::IBuffer* buff = static_cast<data::IBuffer*>(node->sendBuff);
+				buff = buff ? buff->next() : null;
+				while (buff)
+				{
+					data::IBuffer* next = buff->next();
+					buff->unref();
+					buff = next;
+				}
+				core::u::unref(&node->recvBuff);
+				core::u::unref(&node->sendBuff);
+
+				m::OnNodeClosed onClose(id(), core::IDMessage,  node);
+				onClose.post();
+			}
 			virtual Nil onError(xlib::IDataEntry::ErrorCode code, const char* foramt, ...)
 			{
 			};
@@ -60,18 +85,22 @@ namespace ka
 				data::IBuffer* buff = null;
 				if (!node->recvBuff)
 				{
-					Int numCached = node->data[0];
-					Int numCopies = numCached + numBytes;
-					numCopies = numCopies > 4 ? numCopies - numCached : numBytes;
-					memcpy(&node->data[numCached + 1], data, numCopies);
-					numBytes -= numCopies;
-					data += numCopies;
-
-					numCopies = numCopies + node->data[0];
-					node->data[0] = numCopies;
-					if (numCopies < 4)return;
 					Byte* userData = node->data;
-					int len = userData[0] << 24 | userData[1] << 16 | userData[2] << 8 | userData[3];
+					Int num = userData[0];
+					Byte* dest = &userData[num + 1];
+					while (numBytes > 0)
+					{
+						*dest = *data;
+						dest++;
+						data++;
+						num++;
+						numBytes--;
+						if (num >= 4)break;
+					}
+					userData[0] = num;
+					if (num < 4)return;
+					Int len = entry::u::readLength(&userData[1]);
+					userData[0] = 0;
 					buff = data::IBuffer::create(len);
 					node->recvBuff = buff;
 				}
@@ -79,10 +108,48 @@ namespace ka
 				{
 					buff = static_cast<data::IBuffer*>(node->recvBuff);
 				}
+				if (buff->position() + numBytes >= buff->length())
+				{
+					Int numWrite = buff->length() - buff->position();
+					buff->writer()->writeBytes(data, numWrite);
+
+					m::OnBuffer onbuf(id(), core::IDMessage, buff, node);
+					onbuf.post();
+
+					buff->unref();
+					node->recvBuff = null;
+					numBytes -= numWrite;
+					data += numWrite;
+					if (numBytes > 0)
+						onRecvData(data, numBytes, tag);
+					return;
+				}
 				buff->writer()->writeBytes(data, numBytes);
+
 			};
 			virtual Nil getSendData(Byte* data, Int lenOfData, Int* len, xlib::IDataEntry::UserTag tag)
 			{
+				data::Node* node = static_cast<data::Node*>(tag);
+				xthrow(node == null, error::CorruptData, "Failed to convert xlib::IDataEntry::UserTag to data::Node.");
+				data::IBuffer* buff = static_cast<data::IBuffer*>(node->sendBuff);
+				xthrow(buff == null, error::CorruptData, "Failed to get sent buff.");
+
+				Int numSent = buff->length() - buff->position();
+				if (numSent > lenOfData)
+				{
+					*len = buff->reader()->readBytes(data, lenOfData);
+				}
+				else
+				{
+					*len = buff->reader()->readBytes(data, numSent);
+				}
+				if (buff->length() <= buff->position())
+				{
+					data::IBuffer* next = buff->next();
+					node->sendBuff = next;
+					buff->next(null);
+					buff->unref();
+				}
 			};
 		};
 	};

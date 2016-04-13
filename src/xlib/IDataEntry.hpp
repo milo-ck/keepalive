@@ -26,6 +26,7 @@ namespace xlib
 			virtual UserTag onNewClient(const struct sockaddr_in* addr, EntryTag tag) = 0;
 			virtual Nil onRecvData(Byte* data, Int numBytes, UserTag tag) = 0;
 			virtual Nil getSendData(Byte* data, Int lenOfData, Int* len, UserTag tag) = 0;
+			virtual Nil onCloseClient(UserTag tag) = 0;
 		};
 
 		static IDataEntry* create(IDataEntry::Listener* listener);

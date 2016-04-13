@@ -47,6 +47,7 @@ namespace xlib
 		virtual Int		position()			{ return position_;				}
 		virtual Boolean position(Int pos)	{ position_ = pos;	return true;}
 		virtual Int		length()			{ return length_;				}
+		virtual Nil		length(Int v)		{ setCapacity(v); length_ = v; }
 		virtual Boolean eos()				{ return position_ >= length_;	}
 
 		virtual Int		read(Byte* data, Int len)

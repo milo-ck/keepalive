@@ -25,7 +25,7 @@ namespace ka
 			const core::Parameter* p() { return &p_; }
 			virtual bool post() 
 			{
-				return false;
+				return core::Controller::put(p());
 			}
 		};
 	}
