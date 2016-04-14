@@ -10,19 +10,37 @@ namespace xlib
 	public:
 	    Nil static log(const Char* format, ...)
 	    {
+			va_list args;
+			va_start(args, format);
+			logv(format, args);
+			va_end(args);
 	    };
-	    Nil static error(const Char* issue)
+	    Nil static error(const Char* format, ...)
 	    {
+			va_list args;
+			va_start(args, format);
+			errorv(format, args);
+			va_end(args);
 	    };
 		Int static print(const Char* format, ...)
 		{
 			va_list args;
 			va_start(args, format);
-			Int cnt = vprintf(format, args);
+			Int cnt = printv(format, args);
 			va_end(args);
-			printf("\r\n");
 			return(cnt);
-		}
+		};
+		Int static printv(const Char* format, va_list args)
+		{
+			Int cnt = vprintf(format, args);
+			::printf("\r\n");
+		};
+		Nil static errorv(const Char* format, va_list args)
+		{
+		};
+		Nil static logv(const Char* format, va_list args)
+		{
+		};
 	};
 
 }

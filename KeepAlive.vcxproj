@@ -160,6 +160,7 @@
     <ClInclude Include="src\core\data\Buffer.hpp" />
     <ClInclude Include="src\core\data\data.h" />
     <ClInclude Include="src\core\data\IBuffer.h" />
+    <ClInclude Include="src\core\entry\DataEntry.hpp" />
     <ClInclude Include="src\core\entry\entry.u.h" />
     <ClInclude Include="src\core\entry\HTTPEntry.hpp" />
     <ClInclude Include="src\core\entry\TCPEntry.hpp" />

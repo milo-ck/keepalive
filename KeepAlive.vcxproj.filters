@@ -221,6 +221,9 @@
     <ClInclude Include="src\core\entry\entry.u.h">
       <Filter>src\core\entry</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\entry\DataEntry.hpp">
+      <Filter>src\core\entry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="ka.cnf" />
