@@ -4,6 +4,7 @@
 
 
 #include "xlib/Exception.hpp"
+#include "xlib/URI.hpp"
 #include "xlib/Mutex.hpp"
 #include "xlib/MutexSignal.hpp"
 #include "xlib/Log.hpp"

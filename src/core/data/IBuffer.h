@@ -18,6 +18,7 @@ namespace ka
 			virtual Boolean position(Int pos) = 0;
 			virtual IBuffer* next() = 0;
 			virtual Nil next(IBuffer* buff) = 0;
+			virtual Int		leftShift(Int from, Int to) = 0;
 		};
 	};
 };

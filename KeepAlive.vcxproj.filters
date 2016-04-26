@@ -224,6 +224,12 @@
     <ClInclude Include="src\core\entry\DataEntry.hpp">
       <Filter>src\core\entry</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\entry\HTTPBuffer.hpp">
+      <Filter>src\core\entry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\xlib\URI.hpp">
+      <Filter>src\xlib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="ka.cnf" />

@@ -9,7 +9,10 @@ namespace ka
 		{
 		protected:
 			virtual data::IBuffer* onSend(data::Node* node, data::IBuffer* buff) { return buff; }
-			virtual Nil onSent(data::Node* node, data::IBuffer* buff) {};
+			virtual Nil onSent(data::Node* node, data::IBuffer* buff)
+			{
+				entry()->close(node);
+			};
 			virtual Nil onRecv(data::Node* node, Byte* data, Int numBytes)
 			{
 				data::IBuffer* buff = null;

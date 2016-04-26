@@ -66,6 +66,7 @@ namespace ka
 			virtual Int length()				{ return stream()->length(); };
 			virtual Int position()				{ return stream()->position(); };
 			virtual Boolean position(Int pos)	{ return stream()->position(pos);};
+			virtual Int		leftShift(Int from, Int to) { return stream()->leftShift(from, to); }
 			virtual Nil next(IBuffer* buff) { next_ = buff; };
 			virtual IBuffer* next() { return next_; };
 		protected:

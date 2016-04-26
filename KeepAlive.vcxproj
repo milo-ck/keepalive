@@ -162,6 +162,7 @@
     <ClInclude Include="src\core\data\IBuffer.h" />
     <ClInclude Include="src\core\entry\DataEntry.hpp" />
     <ClInclude Include="src\core\entry\entry.u.h" />
+    <ClInclude Include="src\core\entry\HTTPBuffer.hpp" />
     <ClInclude Include="src\core\entry\HTTPEntry.hpp" />
     <ClInclude Include="src\core\entry\TCPEntry.hpp" />
     <ClInclude Include="src\core\kastd.h" />
@@ -213,6 +214,7 @@
     <ClInclude Include="src\xlib\stream_.h" />
     <ClInclude Include="src\xlib\Thread.hpp" />
     <ClInclude Include="src\xlib\types_.h" />
+    <ClInclude Include="src\xlib\URI.hpp" />
     <ClInclude Include="src\xlib\xlib.h" />
     <ClInclude Include="src\xlib\xlib.u_.h" />
   </ItemGroup>

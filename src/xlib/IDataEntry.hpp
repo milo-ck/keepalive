@@ -36,5 +36,6 @@ namespace xlib
 		virtual bool start(short port, short numThreads) = 0;
 		virtual bool stop() = 0;
 		virtual bool trySend(EntryTag tag) = 0;
+		virtual bool shutdown(EntryTag tag) = 0;
 	};
 }

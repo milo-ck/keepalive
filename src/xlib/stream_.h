@@ -12,6 +12,8 @@ namespace xlib
 		virtual Boolean eos() = 0;
 		virtual Int		read(Byte* data, Int len) = 0;
 		virtual Int		write(const Byte* data, Int len) = 0;
+
+		virtual Int		leftShift(Int from, Int to) = 0;
 		
 
 	};
